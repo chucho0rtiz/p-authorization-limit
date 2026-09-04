@@ -148,7 +148,22 @@ Servicio backend para controlar autorizaciones de consumo de clientes contra un 
 - Usé OpenCode con la integración de IA free para verificar la realización de documentación del README y mejorar la redacción y escritura del documento para que sea más legible.
 - Le di a la IA el schema de mi DB para que me generara información de muestra para poder usar en la prueba y no tener que crear todo manualmente.
 - Generé con Claude los scripts que ejecutan la prueba de concurrencia solicitada en la prueba técnica para que solo tenga que ejecutarla con un doble clic con un ejecutable .bat.
+- Se utiliza la IA para realizar el test de integracion para la prueba de concurrencia directamente desde el codigo para complementar el script que realice anteriormente.
 
 ## Pruebas automatizadas
 
-*(pendiente — ver sección 9 del enunciado)*
+**`AuthorizationServiceTest`** (unitario, con Mockito + `StepVerifier`, sin base de datos real):
+- Autorización aprobada.
+- Rechazo por fondos insuficientes.
+- Rechazo por cliente inexistente.
+- Rechazo por cliente inactivo.
+- Rechazo por monto inválido.
+- Idempotencia: misma transacción repetida con los mismos datos no vuelve a descontar.
+- Conflicto: misma transacción repetida con datos distintos.
+
+**`AuthorizationConcurrencyIntegrationTest`** (integración, contra la base de datos real): el escenario de borde. Replica el ejemplo exacto de la prueba (cliente con $100.000 disponibles, dos solicitudes de $70.000 y $60.000) disparadas realmente en paralelo con `Mono.zip`. Verifica que:
+- Al menos una se aprueba.
+- Nunca se aprueban ambas si supera el monto de `daily_limit`.
+- El saldo final nunca queda negativo.
+
+Requiere que exista el cliente `CUS-CONCURRENCY-TEST` en la base de datos y que las variables de entorno de conexión estén disponibles también al correr los tests, no solo la aplicación.

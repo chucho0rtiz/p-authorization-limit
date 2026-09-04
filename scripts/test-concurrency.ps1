@@ -1,10 +1,10 @@
 $baseUrl = "http://localhost:8080"
-$customerId = "CUS-002"
+$customerId = "CUS-CONCURRENCY-TEST"
 
-$transactionIdA = "TX-CONC-A-" + (Get-Date -Format "yyyyMMddHHmmss")
-$transactionIdB = "TX-CONC-B-" + (Get-Date -Format "yyyyMMddHHmmss")
-$amountA = 25000
-$amountB = 26000
+$transactionIdA = "TX-CONC-c-" + (Get-Date -Format "yyyyMMddHHmmss")
+$transactionIdB = "TX-CONC-d-" + (Get-Date -Format "yyyyMMddHHmmss")
+$amountA = 50000
+$amountB = 50000
 
 $jsonA = "{\`"transactionId\`":\`"$transactionIdA\`",\`"customerId\`":\`"$customerId\`",\`"amount\`":$amountA}"
 $jsonB = "{\`"transactionId\`":\`"$transactionIdB\`",\`"customerId\`":\`"$customerId\`",\`"amount\`":$amountB}"

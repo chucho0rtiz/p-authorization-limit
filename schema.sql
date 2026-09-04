@@ -2,7 +2,6 @@ drop table if exists authorizations;
 
 drop table if exists customers;
 
-
 create table customers (
     customer_id varchar(25) primary key,
     daily_limit bigint not null,
@@ -19,7 +18,6 @@ create table authorizations (
     customer_id varchar(25) not null,
     constraint fk_customers_authorizations foreign KEY (customer_id) references customers (customer_id) on delete RESTRICT
 );
-
 
 insert into
     customers (
@@ -39,7 +37,8 @@ values
     ('CUS-006', 1000000, 0, 1000000, false, true),
     ('CUS-007', 100000, 90000, 10000, false, true),
     ('CUS-INACTIVE', 500000, 0, 500000, false, false),
-    ('CUS-ADMIN', 0, 0, 0, true, true);
+    ('CUS-ADMIN', 0, 0, 0, true, true),
+    ('CUS-CONCURRENCY-TEST', 100000, 0, 100000, false, true);
 
 insert into
     authorizations (transaction_id, amount, customer_id)
